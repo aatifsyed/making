@@ -1,15 +1,15 @@
-# LIBRARY_DIR = libraries/
-# INTERFACE_DIR = interfaces/
-# LIBRARY_OBJECTS = objects/libraries/
-# EXECUTABLE_OBJECTS = objects/exectuables/
+output/executables/print_name : code/print_name.c output/libraries/libpretty.a
+	# print_name out of date. Compiling source file against library...
+	gcc -o output/executables/print_name code/print_name.c -Iinterfaces/ -Loutput/libraries -lpretty
 
-# libprint_colourful : $(INTERFACE_DIR)print_colourful.h $(LIBRARY_DIR)print_colourful.c
-# 	# Make an object file
-# 	gcc -o $(LIBRARY_OBJECTS)print_colourful.o -c -I$(INTERFACE_DIR) $(LIBRARY_DIR)print_colourful.c
-# 	# Make that into an archive
-# 	ar cr $(LIBRARY_OBJECTS)libprint_colourful.a $(LIBRARY_OBJECTS)print_colourful.o
+output/objects/print_rjust.o : libraries/pretty/print_rjust.c
+	# rjust.o out of date. Compiling source file...
+	gcc -o output/objects/print_rjust.o -c libraries/pretty/print_rjust.c
 
-libprint_colourful.a : objects/libraries/print_colourful.o
-	ar cr objects/libraries/libprint_colourful.a objects/libraries/libprint_colourful.o
+output/objects/print_colourful.o : libraries/pretty/print_colourful.c
+	# colourful.o out of date. Compiling source file...
+	gcc -o output/objects/print_colourful.o -c libraries/pretty/print_colourful.c -Iinterfaces/
 
-print_colourful.o 
+output/libraries/libpretty.a : output/objects/print_colourful.o output/objects/print_rjust.o
+	# libpretty out of date. Combining objects...
+	ar cr output/libraries/libpretty.a output/objects/print_colourful.o output/objects/print_rjust.o

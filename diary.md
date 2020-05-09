@@ -1,13 +1,25 @@
-[Tutorial I'm following](https://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html)
+# Compiling Library
+## C files into object files
+`gcc -o output/objects/print_rjust.o -c libraries/pretty/print_rjust.c` will `c`ompile the source file, and `o`utput an object file
 
-`gcc -o hello_world code/hello_world.c` will produce an executable in `.`
+`gcc -o output/objects/print_colourful.o -c libraries/pretty/print_colourful.c -Iinterfaces/` specifies the `I`nclude directory
 
-`gcc -c code/hello_world.c` will produce the object file `hello_world.o`
+`readelf -s output/objects/print_colourful.o` will print the `s`ymbols in the object, Can also use `nm`, below, but `nm -t` is temperamental?
 
-The object file is machine code interlaced with *symbols*, which are the names of global objects, functions that are then used for linking
+## Combine our two object files into one library
+`ar cr output/libraries/libpretty.a output/objects/print_colourful.o output/objects/print_rjust.o`
 
-You can look inside them with `nm` or `objdump -t`
+We now have a library that we can link to.
+See what symbols are in the library with `nm output/libraries/libpretty.a`
 
-`gcc -o hello_world hello_world.o` will make the executable from the object code, substituting in the symbols for more machine code
+# Linking to that library
+`gcc -o output/executables/print_name code/print_name.c -Iinterfaces/ output/libraries/libpretty.a`, and the library must be specified last...?
+
+`gcc -o output/executables/print_name code/print_name.c -Iinterfaces/ -Loutput/libraries -lpretty` to look in the `L`ibrary directory for the `l`ibrary
+
+# Links
+https://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html
 
 https://www.cs.swarthmore.edu/~newhall/unixhelp/howto_C_libraries.html
+
+https://www.cs.dartmouth.edu/~campbell/cs50/buildlib.html
