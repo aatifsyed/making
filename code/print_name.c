@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <print_colourful.h>
+#include <pretty.h>
 #define LEN 10
 
 int main()
@@ -12,6 +12,9 @@ int main()
     fputs("Your name is : ", stdout);
     fputs(name, stdout);
     unset_colour();
+
+    print_rjust(10, "hello");
+    print_rjust(10, name);
 
     return 0;
 }
