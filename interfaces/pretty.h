@@ -12,7 +12,7 @@ cyan,
 white
 } COLOUR;
 
-extern void print_colourful(COLOUR colour, char* str, ...);
+extern void printf_colourful(COLOUR colour, char* str, ...);
 extern void set_colour(COLOUR color);
 extern void unset_colour();
 

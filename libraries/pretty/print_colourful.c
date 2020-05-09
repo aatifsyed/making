@@ -2,7 +2,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-void print_colourful(COLOUR colour, char* str, ...)
+void printf_colourful(COLOUR colour, char* str, ...)
 {
     va_list args;
     printf("\033[0;%dm", colour);
