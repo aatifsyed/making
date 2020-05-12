@@ -1,43 +1,48 @@
 SHELL = bash # for expansion
 
 CC = gcc
-CFLAGS = -I$(INC_DIR)
+CFLAGS = -I$(INT_SRC) -L$(LIB_DIR)
 
-INC_DIR = interfaces/
-OBJ_DIR = output/objects/
+SRC = code/
+INT_SRC = interfaces/
+LIB_SRC = libraries/
+
 EXE_DIR = output/executables/
 LIB_DIR = output/libraries/
+OBJ_DIR = output/objects/
 
 # $@ : $^     refers to all of the RHS
 # $@ : $< ... refers to just the first item
 
-output/executables/print_name : code/print_name.c output/libraries/libpretty.a interfaces/pretty.h
+print_name : $(EXE_DIR)print_name
+
+$(EXE_DIR)print_name : $(SRC)print_name.c $(LIB_DIR)libpretty.a $(INT_SRC)pretty.h
 	# print_name out of date. Compiling source file against library...
-	gcc -o $@ code/print_name.c -Iinterfaces/ -Loutput/libraries -lpretty
+	gcc -o $@ $(SRC)print_name.c $(CFLAGS) -lpretty
 
 # libpretty
 
-output/objects/print_rjust.o : libraries/pretty/print_rjust.c
+$(OBJ_DIR)print_rjust.o : $(LIB_SRC)pretty/print_rjust.c
 	# rjust.o out of date. Compiling source file...
-	gcc -o $@ -c libraries/pretty/print_rjust.c
+	gcc -o $@ -c $(LIB_SRC)pretty/print_rjust.c
 
-output/objects/print_colourful.o : libraries/pretty/print_colourful.c interfaces/pretty.h
+$(OBJ_DIR)print_colourful.o : $(LIB_SRC)pretty/print_colourful.c $(INT_SRC)pretty.h
 	# colourful.o out of date. Compiling source file...
-	gcc -o $@ -c libraries/pretty/print_colourful.c -Iinterfaces/
+	gcc -o $@ -c $(LIB_SRC)pretty/print_colourful.c $(CFLAGS)
 
-output/libraries/libpretty.a : output/objects/print_colourful.o output/objects/print_rjust.o
+$(LIB_DIR)libpretty.a : $(OBJ_DIR)print_colourful.o $(OBJ_DIR)print_rjust.o
 	# libpretty out of date. Combining objects...
-	ar cr $@ output/objects/print_colourful.o output/objects/print_rjust.o
+	ar cr $@ $(OBJ_DIR)print_colourful.o $(OBJ_DIR)print_rjust.o
 
 # libsimclist
 
-output/objects/simclist.o : libraries/simclist/simclist.c interfaces/simclist.h
+$(OBJ_DIR)simclist.o : $(LIB_SRC)simclist/simclist.c $(INT_SRC)simclist.h
 	# simclist.o out of date. Compiling source file...
-	gcc -o $@ -c libraries/simclist/simclist.c -Iinterfaces/
+	gcc -o $@ -c $(LIB_SRC)simclist/simclist.c $(CFLAGS)
 
-output/libraries/libsimclist.a : output/objects/simclist.o
+$(LIB_DIR)libsimclist.a : $(OBJ_DIR)simclist.o
 	# libsimclist out of date. Combining objects...
-	ar cr $@ output/objects/simclist.o
+	ar cr $@ $(OBJ_DIR)simclist.o
 
 # utilities
 .PHONY: clean
