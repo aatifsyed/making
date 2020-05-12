@@ -1,3 +1,5 @@
+Learning makefiles etc.
+
 # Compiling Library
 ## C files into object files
 `gcc -o output/objects/print_rjust.o -c libraries/pretty/print_rjust.c` will `c`ompile the source file, and `o`utput an object file
